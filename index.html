@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frases de la Virgen María</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --violet: #4A3F8F;
+    --violet-light: #6B5DB5;
+    --violet-pale: #EAE7F7;
+    --gold: #C4943A;
+    --gold-light: #F0C97A;
+    --cream: #FAF8F3;
+    --dark: #1C1830;
+    --muted: #7A7590;
+    --white: #FFFFFF;
+    --border: rgba(74,63,143,0.12);
+    --success: #2D7A4F;
+    --success-bg: #E8F5EE;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ─── NAV TABS ─── */
+  .nav {
+    display: flex;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(74,63,143,0.06);
+  }
+  .nav-tab {
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .nav-tab.active { color: var(--violet); border-bottom-color: var(--violet); }
+  .nav-tab:hover:not(.active) { color: var(--dark); }
+
+  /* ─── VIEWS ─── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ─── STUDENT VIEW ─── */
+  .student-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  /* Hero banner */
+  .hero {
+    background: var(--violet);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(196,148,58,0.15);
+  }
+  .hero-icon { font-size: 40px; margin-bottom: 12px; }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+  .hero p { font-size: 13px; opacity: 0.75; font-weight: 300; }
+
+  /* Card base */
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Name section */
+  .field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .field-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    transition: border-color 0.2s;
+  }
+  .field-input:focus { outline: none; border-color: var(--violet-light); background: var(--white); }
+
+  .btn-secondary {
+    margin-top: 10px;
+    padding: 9px 18px;
+    background: var(--violet-pale);
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--violet);
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-secondary:hover { background: #D8D3F0; }
+
+  /* Phrase card */
+  .day-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .day-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--gold); }
+
+  .phrase-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--dark);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+  .phrase-author {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* Collect button */
+  .btn-collect {
+    width: 100%;
+    padding: 14px;
+    background: var(--violet);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s, transform 0.1s;
+    margin-bottom: 1rem;
+  }
+  .btn-collect:hover:not(:disabled) { background: var(--violet-light); }
+  .btn-collect:active:not(:disabled) { transform: scale(0.98); }
+  .btn-collect:disabled { background: var(--success-bg); color: var(--success); cursor: default; font-weight: 500; }
+
+  /* My phrases */
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 14px;
+    color: var(--dark);
+  }
+  .phrase-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--violet-pale);
+    color: var(--violet);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .collected-list { list-style: none; max-height: 180px; overflow-y: auto; }
+  .collected-list li {
+    font-size: 13px;
+    color: var(--dark);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .collected-list li:last-child { border-bottom: none; }
+  .collected-list .li-date {
+    font-size: 11px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* Prize banner */
+  .prize {
+    background: linear-gradient(135deg, #FBF4E6, #FFF8ED);
+    border: 1px solid var(--gold-light);
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .prize p { font-size: 13px; color: #7A5C1E; line-height: 1.6; }
+  .prize strong { font-weight: 500; color: var(--gold); }
+
+  /* ─── ADMIN VIEW ─── */
+  .admin-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  /* Login */
+  .login-box {
+    background: var(--white);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    max-width: 380px;
+    margin: 3rem auto;
+    text-align: center;
+  }
+  .login-box .login-icon { font-size: 36px; margin-bottom: 1rem; }
+  .login-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 6px;
+    color: var(--dark);
+  }
+  .login-box p { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; }
+  .login-box .field-input { margin-bottom: 10px; text-align: left; }
+  .btn-login {
+    width: 100%;
+    padding: 12px;
+    background: var(--violet);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+    margin-top: 4px;
+  }
+  .btn-login:hover { background: var(--violet-light); }
+  .error-msg {
+    font-size: 13px;
+    color: #B03030;
+    background: #FDEAEA;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    display: none;
+  }
+
+  /* Admin panel */
+  .admin-panel { display: none; }
+  .admin-panel.visible { display: block; }
+
+  .admin-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+  }
+  .admin-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    flex: 1;
+    color: var(--dark);
+  }
+  .badge-admin {
+    background: var(--violet-pale);
+    color: var(--violet);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .btn-logout {
+    padding: 8px 14px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-logout:hover { background: var(--cream); }
+
+  .section-card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .section-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 14px;
+  }
+
+  .current-preview {
+    background: var(--violet-pale);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .current-preview p {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--violet);
+    line-height: 1.65;
+    margin-bottom: 6px;
+  }
+  .current-preview span { font-size: 12px; color: var(--violet-light); }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    display: block;
+  }
+  textarea.field-input {
+    min-height: 90px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .btn-publish {
+    margin-top: 14px;
+    padding: 12px 24px;
+    background: var(--violet);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-publish:hover { background: var(--violet-light); }
+
+  .success-toast {
+    display: none;
+    background: var(--success-bg);
+    color: var(--success);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-top: 10px;
+    font-weight: 500;
+  }
+  .success-toast.show { display: block; }
+
+  /* Suggestions */
+  .suggestions-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .suggestion-chip {
+    font-size: 12px;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    text-align: left;
+    line-height: 1.4;
+    max-width: 260px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .suggestion-chip:hover { background: var(--violet-pale); border-color: var(--violet-light); color: var(--violet); }
+
+  /* Ranking */
+  .rank-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rank-table th {
+    text-align: left;
+    padding: 8px 10px;
+    color: var(--muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .rank-table td { padding: 10px; border-bottom: 1px solid var(--border); color: var(--dark); }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-circle {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+  }
+  .rank-1 { background: #FDE9B2; color: #7A5C1E; }
+  .rank-2 { background: #E0E0E0; color: #555; }
+  .rank-3 { background: #F5C4B3; color: #6B2D18; }
+  .rank-n { background: var(--cream); color: var(--muted); }
+
+  /* QR info */
+  .qr-note {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 1rem;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .qr-note strong { color: var(--dark); font-weight: 500; }
+  .url-box {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    word-break: break-all;
+    color: var(--violet);
+    cursor: pointer;
+  }
+  .url-box:hover { background: var(--violet-pale); }
+  .copy-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .qr-links { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .qr-link {
+    font-size: 12px;
+    color: var(--violet);
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    transition: background 0.15s;
+  }
+  .qr-link:hover { background: var(--violet-pale); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-tab active" onclick="switchTab('student', this)">🌹 Para estudiantes</button>
+  <button class="nav-tab" onclick="switchTab('admin', this)">⚙️ Administrador</button>
+</nav>
+
+<!-- ═══════════════ STUDENT VIEW ═══════════════ -->
+<div id="view-student" class="view active">
+  <div class="student-wrap">
+
+    <div class="hero">
+      <div class="hero-icon">🌹</div>
+      <h1>Frases de la Virgen María</h1>
+      <p>Recoge la frase del día y acumula puntos del mes</p>
+    </div>
+
+    <!-- Name -->
+    <div class="card" id="name-card">
+      <label class="field-label">Tu nombre</label>
+      <input class="field-input" type="text" id="student-name" placeholder="Ej: Valentina García" />
+      <button class="btn-secondary" onclick="saveName()">Guardar nombre</button>
+    </div>
+
+    <!-- Phrase of the day -->
+    <div class="card">
+      <div class="day-label" id="day-label">Cargando...</div>
+      <div class="phrase-text" id="phrase-text">Cargando la frase del día...</div>
+      <div class="phrase-author" id="phrase-author"></div>
+    </div>
+
+    <button class="btn-collect" id="collect-btn" onclick="collectPhrase()">Guardar frase del día</button>
+
+    <!-- My phrases -->
+    <div class="card">
+      <h3>Mis frases recolectadas</h3>
+      <div class="phrase-count" id="phrase-count">0 frases</div>
+      <ul class="collected-list" id="collected-list">
+        <li style="color:var(--muted); font-style:italic; font-size:13px;">Aún no has recolectado frases.</li>
+      </ul>
+    </div>
+
+    <!-- Prize -->
+    <div class="prize">
+      <p>🏆 <strong>¡Premio del mes!</strong><br>
+      Quien más frases acumule al final del mes recibirá un reconocimiento especial. ¡Escanea el código QR cada día!</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ ADMIN VIEW ═══════════════ -->
+<div id="view-admin" class="view">
+  <div class="admin-wrap">
+
+    <!-- Login -->
+    <div id="login-box" class="login-box">
+      <div class="login-icon">🔐</div>
+      <h2>Panel de administración</h2>
+      <p>Ingresa tus credenciales para continuar</p>
+      <div id="login-error" class="error-msg">Usuario o contraseña incorrectos</div>
+      <input class="field-input" type="text" id="admin-user" placeholder="Usuario" />
+      <input class="field-input" type="password" id="admin-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter') doLogin()" />
+      <button class="btn-login" onclick="doLogin()">Entrar</button>
+    </div>
+
+    <!-- Panel -->
+    <div id="admin-panel" class="admin-panel">
+
+      <div class="admin-header">
+        <h2>Panel de administración</h2>
+        <span class="badge-admin">Admin</span>
+        <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+      </div>
+
+      <!-- Current & change phrase -->
+      <div class="section-card">
+        <h3>Frase activa hoy</h3>
+        <div class="current-preview">
+          <p id="admin-current-text">Cargando...</p>
+          <span id="admin-current-author"></span>
+        </div>
+
+        <h3>Publicar nueva frase</h3>
+        <span class="section-label">Texto de la frase</span>
+        <textarea class="field-input" id="new-phrase" placeholder="Escribe aquí la nueva frase en honor a la Virgen María..."></textarea>
+        <span class="section-label">Fuente o referencia</span>
+        <input class="field-input" type="text" id="new-author" placeholder="Ej: San Luis de Montfort / Apariciones de Fátima" />
+        <button class="btn-publish" onclick="savePhrase()">Publicar frase del día</button>
+        <div class="success-toast" id="save-toast">✓ ¡Frase publicada exitosamente!</div>
+      </div>
+
+      <!-- Suggestions -->
+      <div class="section-card">
+        <h3>Banco de frases sugeridas</h3>
+        <p style="font-size:13px; color:var(--muted); margin-bottom:14px;">Haz clic en una frase para usarla directamente.</p>
+        <div class="suggestions-grid" id="suggestions-grid"></div>
+      </div>
+
+      <!-- Ranking -->
+      <div class="section-card">
+        <h3>Ranking del mes</h3>
+        <div id="ranking-container">
+          <p style="font-size:13px; color:var(--muted);">Cargando ranking...</p>
+        </div>
+      </div>
+
+      <!-- QR Info -->
+      <div class="section-card">
+        <h3>Código QR</h3>
+        <div class="qr-note">
+          <strong>El QR siempre apunta a la misma URL.</strong> Genera un código QR con la URL de este archivo una sola vez, imprímelo y pégalo donde los jóvenes puedan escanearlo. La frase cambia cada día sin cambiar el QR.
+          <div class="url-box" id="qr-url" onclick="copyUrl()" title="Clic para copiar">Cargando URL...</div>
+          <div class="copy-hint">Clic para copiar la URL</div>
+          <div class="qr-links">
+            <a class="qr-link" href="https://www.qrcode-monkey.com" target="_blank">QR Code Monkey</a>
+            <a class="qr-link" href="https://qr.io" target="_blank">qr.io</a>
+            <a class="qr-link" href="https://app.netlify.com/drop" target="_blank">Subir a Netlify</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ───
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "maria2025";
+
+const PHRASES_BANK = [
+  { text: "Acudir a María es acudir a la misericordia de Dios.", author: "San Bernardo de Claraval" },
+  { text: "Oh María, sin pecado concebida, ruega por nosotros que recurrimos a ti.", author: "Oración tradicional" },
+  { text: "A Jesús por María. A María por Jesús.", author: "San Luis de Montfort" },
+  { text: "Nunca se oyó decir que nadie que recurrió a tu protección quedara sin consuelo.", author: "Sub Tuum Praesidium" },
+  { text: "María es la aurora que precede al sol de justicia.", author: "San Juan Damasceno" },
+  { text: "Quien lleva el rosario lleva la mano de María.", author: "Beato Bartolo Longo" },
+  { text: "La devoción a María es señal de predestinación.", author: "San Alfonso María de Ligorio" },
+  { text: "María es el camino más corto y seguro para llegar a Dios.", author: "San Luis de Montfort" },
+  { text: "Toda gracia que baja del cielo pasa por las manos de María.", author: "San Bernardo de Claraval" },
+  { text: "No temas, María siempre está con quienes la buscan de corazón.", author: "Nuestra Señora de Guadalupe" },
+  { text: "María es Madre de Dios y Madre nuestra; en ella ponemos toda nuestra confianza.", author: "San Juan Pablo II" },
+  { text: "Bajo tu amparo nos acogemos, santa Madre de Dios.", author: "Sub Tuum Praesidium" },
+  { text: "María es el espejo de Dios, en el que se refleja toda su bondad.", author: "San Francisco de Sales" },
+  { text: "Recurre a María en todas tus necesidades, ella nunca te abandona.", author: "Santa Teresa de Ávila" },
+  { text: "El rosario es el arma poderosa que María nos ha dado para combatir el mal.", author: "San Pío de Pietrelcina" },
+];
+
+// ─── UTILS ───
+function today() { return new Date().toISOString().split('T')[0]; }
+function monthKey() { return new Date().toISOString().slice(0, 7); }
+
+function getDeviceId() {
+  let id = localStorage.getItem('_fvm_dev');
+  if (!id) { id = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); localStorage.setItem('_fvm_dev', id); }
+  return id;
+}
+
+// ─── STORAGE (localStorage fallback since this is a standalone file) ───
+function lsGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
+function lsSet(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
+
+// Shared data uses localStorage with a "shared_" prefix
+// In a real hosted setup you would use a backend; for this standalone file localStorage works per device.
+// Admin publishes to "shared_phrase" and students read from it.
+
+function getPhrase() {
+  const saved = lsGet('shared_phrase');
+  if (saved) return JSON.parse(saved);
+  return PHRASES_BANK[0];
+}
+
+function setPhrase(obj) { lsSet('shared_phrase', JSON.stringify(obj)); }
+
+function getRanking() {
+  const r = lsGet('shared_ranking_' + monthKey());
+  return r ? JSON.parse(r) : {};
+}
+
+function setRanking(obj) { lsSet('shared_ranking_' + monthKey(), JSON.stringify(obj)); }
+
+// ─── TAB SWITCHING ───
+function switchTab(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'admin' && lsGet('_fvm_admin') === '1') showAdminPanel();
+}
+
+// ─── STUDENT ───
+let currentStudentName = '';
+let currentPhrase = null;
+
+function initStudent() {
+  currentPhrase = getPhrase();
+  const d = new Date();
+  document.getElementById('day-label').textContent =
+    d.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
+  document.getElementById('phrase-text').textContent = '\u201c' + currentPhrase.text + '\u201d';
+  document.getElementById('phrase-author').textContent = '\u2014 ' + currentPhrase.author;
+
+  const savedName = lsGet('_fvm_name_' + getDeviceId());
+  if (savedName) {
+    currentStudentName = savedName;
+    document.getElementById('student-name').value = savedName;
+  }
+
+  checkCollected();
+  renderMyPhrases();
+}
+
+function saveName() {
+  const n = document.getElementById('student-name').value.trim();
+  if (!n) { alert('Por favor escribe tu nombre.'); return; }
+  currentStudentName = n;
+  lsSet('_fvm_name_' + getDeviceId(), n);
+  alert('¡Nombre guardado, ' + n + '!');
+  checkCollected();
+}
+
+function checkCollected() {
+  const key = '_fvm_col_' + getDeviceId() + '_' + today();
+  const btn = document.getElementById('collect-btn');
+  if (lsGet(key)) {
+    btn.disabled = true;
+    btn.textContent = '✓ Ya guardaste la frase de hoy';
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'Guardar frase del día';
+  }
+}
+
+function collectPhrase() {
+  if (!currentStudentName) { alert('Primero ingresa tu nombre para registrar tu frase.'); return; }
+  const key = '_fvm_col_' + getDeviceId() + '_' + today();
+  if (lsGet(key)) return;
+  const entry = { date: today(), phrase: currentPhrase.text, author: currentPhrase.author };
+  lsSet(key, JSON.stringify(entry));
+
+  // Update ranking
+  const rank = getRanking();
+  rank[currentStudentName] = (rank[currentStudentName] || 0) + 1;
+  setRanking(rank);
+
+  checkCollected();
+  renderMyPhrases();
+}
+
+function renderMyPhrases() {
+  const list = document.getElementById('collected-list');
+  const countEl = document.getElementById('phrase-count');
+  const devId = getDeviceId();
+  const items = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('_fvm_col_' + devId + '_')) {
+      try { items.push(JSON.parse(localStorage.getItem(k))); } catch(e) {}
+    }
+  }
+  items.sort((a, b) => b.date.localeCompare(a.date));
+
+  const n = items.length;
+  countEl.textContent = n + (n === 1 ? ' frase' : ' frases');
+
+  if (n === 0) {
+    list.innerHTML = '<li style="color:var(--muted); font-style:italic; font-size:13px;">Aún no has recolectado frases.</li>';
+  } else {
+    list.innerHTML = items.map(i =>
+      '<li><span class="li-date">' + i.date + '</span>' + i.phrase + '</li>'
+    ).join('');
+  }
+}
+
+// ─── ADMIN ───
+function doLogin() {
+  const u = document.getElementById('admin-user').value;
+  const p = document.getElementById('admin-pass').value;
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    lsSet('_fvm_admin', '1');
+    document.getElementById('login-error').style.display = 'none';
+    showAdminPanel();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('_fvm_admin');
+  document.getElementById('admin-panel').classList.remove('visible');
+  document.getElementById('login-box').style.display = 'block';
+  document.getElementById('admin-user').value = '';
+  document.getElementById('admin-pass').value = '';
+}
+
+function showAdminPanel() {
+  document.getElementById('login-box').style.display = 'none';
+  document.getElementById('admin-panel').classList.add('visible');
+  loadAdminData();
+}
+
+function loadAdminData() {
+  const p = getPhrase();
+  document.getElementById('admin-current-text').textContent = '\u201c' + p.text + '\u201d';
+  document.getElementById('admin-current-author').textContent = '\u2014 ' + p.author;
+
+  // Suggestions
+  const grid = document.getElementById('suggestions-grid');
+  grid.innerHTML = PHRASES_BANK.map((ph, i) =>
+    '<button class="suggestion-chip" onclick="useSuggestion(' + i + ')">' + ph.text.slice(0, 55) + (ph.text.length > 55 ? '...' : '') + '</button>'
+  ).join('');
+
+  // Ranking
+  renderRanking();
+
+  // URL
+  document.getElementById('qr-url').textContent = window.location.href.split('?')[0];
+}
+
+function useSuggestion(i) {
+  document.getElementById('new-phrase').value = PHRASES_BANK[i].text;
+  document.getElementById('new-author').value = PHRASES_BANK[i].author;
+  document.getElementById('new-phrase').focus();
+}
+
+function savePhrase() {
+  const text = document.getElementById('new-phrase').value.trim();
+  const author = document.getElementById('new-author').value.trim();
+  if (!text) { alert('Por favor escribe una frase antes de publicar.'); return; }
+  const obj = { text, author: author || 'Reflexión mariana' };
+  setPhrase(obj);
+  document.getElementById('admin-current-text').textContent = '\u201c' + text + '\u201d';
+  document.getElementById('admin-current-author').textContent = '\u2014 ' + obj.author;
+  document.getElementById('new-phrase').value = '';
+  document.getElementById('new-author').value = '';
+  const toast = document.getElementById('save-toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+  initStudent(); // refresh student view too
+}
+
+function renderRanking() {
+  const rank = getRanking();
+  const entries = Object.entries(rank).sort((a, b) => b[1] - a[1]);
+  const container = document.getElementById('ranking-container');
+  if (entries.length === 0) {
+    container.innerHTML = '<p style="font-size:13px; color:var(--muted);">Aún no hay participantes este mes.</p>';
+    return;
+  }
+  const rows = entries.map(([name, count], i) => {
+    const cls = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n';
+    return '<tr><td><span class="rank-circle ' + cls + '">' + (i + 1) + '</span></td>' +
+           '<td>' + name + '</td>' +
+           '<td style="text-align:right; font-weight:500;">' + count + ' frase' + (count !== 1 ? 's' : '') + '</td></tr>';
+  }).join('');
+  container.innerHTML = '<table class="rank-table"><thead><tr><th>#</th><th>Estudiante</th><th style="text-align:right;">Frases</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function copyUrl() {
+  const url = window.location.href.split('?')[0];
+  navigator.clipboard.writeText(url).then(() => {
+    const el = document.getElementById('qr-url');
+    el.textContent = '¡Copiado!';
+    setTimeout(() => { el.textContent = url; }, 2000);
+  });
+}
+
+// ─── INIT ───
+if (lsGet('_fvm_admin') === '1') {
+  // auto-show panel if already logged in
+  setTimeout(() => {
+    const adminTab = document.querySelectorAll('.nav-tab')[1];
+    // don't auto-switch; just prep
+  }, 0);
+}
+
+initStudent();
+</script>
+</body>
+</html>
